@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: geth
+  name: geth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: geth
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: geth
+    spec:
+      containers:
+        - args:
+            - --datadir
+            - /data
+            - --syncmode
+            - full
+            - --port
+            - "30311"
+            - --http
+            - --http.addr
+            - 0.0.0.0
+            - --http.corsdomain=*
+            - -http.port
+            - "8545"
+            - --http.vhosts
+            - '*'
+            - --http.api
+            - admin,personal,eth,net,web3,txpool,miner,clique,debug
+            - --networkid
+            - "2021"
+            - --miner.gasprice
+            - "0"
+            - --password
+            - /data/password
+            - --mine
+            - --allow-insecure-unlock
+            - --nodiscover
+            - --verbosity
+            - "4"
+            - --miner.gaslimit
+            - "16777215"
+          image: ethereum/client-go:release-1.10
+          name: mingo3-geth
+          ports:
+            - containerPort: 8545
+          resources: {}
+          volumeMounts:
+            - mountPath: /data
+              name: geth
+      restartPolicy: Always
+      volumes:
+        - name: geth
+          persistentVolumeClaim:
+            claimName: geth
+status: {}

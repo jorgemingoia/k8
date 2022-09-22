@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: tokens-0-0
+  name: tokens-0-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: tokens-0-0
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: tokens-0-0
+    spec:
+      containers:
+        - env:
+            - name: AUTO_INIT
+              value: "false"
+            - name: ETHCONNECT_TOPIC
+              value: tokens_0_0
+            - name: ETHCONNECT_URL
+              value: http://ethconnect_0:8080
+            - name: FACTORY_CONTRACT_ADDRESS
+              value: 0xe9b643fcbc95483712f45c46c3092d9cb93617b3
+          image: ghcr.io/hyperledger/firefly-tokens-erc20-erc721@sha256:9d9d2f657bd09dd277dbfa13825b12123b93d8f77f6496434a7357866d97122d
+          name: mingo3-tokens-0-0
+          ports:
+            - containerPort: 3000
+          resources: {}
+      restartPolicy: Always
+status: {}

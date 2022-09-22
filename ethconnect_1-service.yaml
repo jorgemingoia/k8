@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ethconnect-1
+  name: ethconnect_1
+spec:
+  ports:
+    - name: "5202"
+      port: 5202
+      targetPort: 8080
+  selector:
+    io.kompose.service: ethconnect-1
+status:
+  loadBalancer: {}

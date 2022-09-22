@@ -1,0 +1,197 @@
+# This file is generated - DO NOT EDIT!
+# To override config, edit docker-compose.override.yml
+version: "2.1"
+services:
+    dataexchange_0:
+        container_name: mingo3_dataexchange_0
+        image: ghcr.io/hyperledger/firefly-dataexchange-https@sha256:9b191cf693a5b4a3b0bff48aac36fa76cf040d94033607a240cbd83e4fd2942c
+        volumes:
+            - dataexchange_0:/data
+        ports:
+            - 5105:3000
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    dataexchange_1:
+        container_name: mingo3_dataexchange_1
+        image: ghcr.io/hyperledger/firefly-dataexchange-https@sha256:9b191cf693a5b4a3b0bff48aac36fa76cf040d94033607a240cbd83e4fd2942c
+        volumes:
+            - dataexchange_1:/data
+        ports:
+            - 5205:3000
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    ethconnect_0:
+        container_name: mingo3_ethconnect_0
+        image: ghcr.io/hyperledger/firefly-ethconnect@sha256:39ea63586b322de7c33f127f859b1d4c6fc7ff9e377049898e34a0dea30ab2d7
+        command: server -f ./config/config.yaml -d 2
+        volumes:
+            - ethconnect_config_0:/ethconnect/config
+            - ethconnect_abis_0:/ethconnect/abis
+            - ethconnect_events_0:/ethconnect/events
+        ports:
+            - 5102:8080
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    ethconnect_1:
+        container_name: mingo3_ethconnect_1
+        image: ghcr.io/hyperledger/firefly-ethconnect@sha256:39ea63586b322de7c33f127f859b1d4c6fc7ff9e377049898e34a0dea30ab2d7
+        command: server -f ./config/config.yaml -d 2
+        volumes:
+            - ethconnect_config_1:/ethconnect/config
+            - ethconnect_abis_1:/ethconnect/abis
+            - ethconnect_events_1:/ethconnect/events
+        ports:
+            - 5202:8080
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    firefly_core_0:
+        container_name: mingo3_firefly_core_0
+        image: ghcr.io/hyperledger/firefly@sha256:cc85fa705184f53dba164bac4167c7d51015d2308bf8c2bf26d99a63c802d84e
+        volumes:
+            - firefly_core_0:/etc/firefly
+        ports:
+            - 5000:5000
+            - 5101:5101
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    firefly_core_1:
+        container_name: mingo3_firefly_core_1
+        image: ghcr.io/hyperledger/firefly@sha256:cc85fa705184f53dba164bac4167c7d51015d2308bf8c2bf26d99a63c802d84e
+        volumes:
+            - firefly_core_1:/etc/firefly
+        ports:
+            - 5001:5001
+            - 5201:5201
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    geth:
+        container_name: mingo3_geth
+        image: ethereum/client-go:release-1.10
+        command: --datadir /data --syncmode 'full' --port 30311 --http --http.addr "0.0.0.0" --http.corsdomain="*"  -http.port 8545 --http.vhosts "*" --http.api 'admin,personal,eth,net,web3,txpool,miner,clique,debug' --networkid 2021 --miner.gasprice 0 --password /data/password --mine --allow-insecure-unlock --nodiscover --verbosity 4 --miner.gaslimit 16777215
+        volumes:
+            - geth:/data
+        ports:
+            - 5100:8545
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    ipfs_0:
+        container_name: mingo3_ipfs_0
+        image: ipfs/go-ipfs:v0.10.0
+        environment:
+            IPFS_SWARM_KEY: |-
+                /key/swarm/psk/1.0.0/
+                /base16/
+                e32c1b1c54a23802416db198eb9dc181f2a5f975202b1a252841e2814866fff5
+            LIBP2P_FORCE_PNET: "1"
+        volumes:
+            - ipfs_staging_0:/export
+            - ipfs_data_0:/data/ipfs
+        ports:
+            - 5106:5001
+            - 5107:8080
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    ipfs_1:
+        container_name: mingo3_ipfs_1
+        image: ipfs/go-ipfs:v0.10.0
+        environment:
+            IPFS_SWARM_KEY: |-
+                /key/swarm/psk/1.0.0/
+                /base16/
+                e32c1b1c54a23802416db198eb9dc181f2a5f975202b1a252841e2814866fff5
+            LIBP2P_FORCE_PNET: "1"
+        volumes:
+            - ipfs_staging_1:/export
+            - ipfs_data_1:/data/ipfs
+        ports:
+            - 5206:5001
+            - 5207:8080
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    sandbox_0:
+        container_name: mingo3_sandbox_0
+        image: ghcr.io/hyperledger/firefly-sandbox:latest
+        environment:
+            FF_ENDPOINT: http://firefly_core_0:5000
+        ports:
+            - 5109:3001
+    sandbox_1:
+        container_name: mingo3_sandbox_1
+        image: ghcr.io/hyperledger/firefly-sandbox:latest
+        environment:
+            FF_ENDPOINT: http://firefly_core_1:5001
+        ports:
+            - 5209:3001
+    tokens_0_0:
+        container_name: mingo3_tokens_0_0
+        image: ghcr.io/hyperledger/firefly-tokens-erc20-erc721@sha256:9d9d2f657bd09dd277dbfa13825b12123b93d8f77f6496434a7357866d97122d
+        environment:
+            AUTO_INIT: "false"
+            ETHCONNECT_TOPIC: tokens_0_0
+            ETHCONNECT_URL: http://ethconnect_0:8080
+            FACTORY_CONTRACT_ADDRESS: "0xe9b643fcbc95483712f45c46c3092d9cb93617b3"
+        ports:
+            - 5108:3000
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+    tokens_1_0:
+        container_name: mingo3_tokens_1_0
+        image: ghcr.io/hyperledger/firefly-tokens-erc20-erc721@sha256:9d9d2f657bd09dd277dbfa13825b12123b93d8f77f6496434a7357866d97122d
+        environment:
+            AUTO_INIT: "false"
+            ETHCONNECT_TOPIC: tokens_1_0
+            ETHCONNECT_URL: http://ethconnect_1:8080
+            FACTORY_CONTRACT_ADDRESS: "0xe9b643fcbc95483712f45c46c3092d9cb93617b3"
+        ports:
+            - 5208:3000
+        logging:
+            driver: json-file
+            options:
+                max-file: "1"
+                max-size: 10m
+volumes:
+    dataexchange_0: {}
+    dataexchange_1: {}
+    ethconnect_abis_0: {}
+    ethconnect_abis_1: {}
+    ethconnect_config_0: {}
+    ethconnect_config_1: {}
+    ethconnect_events_0: {}
+    ethconnect_events_1: {}
+    firefly_core_0: {}
+    firefly_core_1: {}
+    geth: {}
+    ipfs_data_0: {}
+    ipfs_data_1: {}
+    ipfs_staging_0: {}
+    ipfs_staging_1: {}

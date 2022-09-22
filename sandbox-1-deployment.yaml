@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sandbox-1
+  name: sandbox-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sandbox-1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sandbox-1
+    spec:
+      containers:
+        - env:
+            - name: FF_ENDPOINT
+              value: http://firefly_core_1:5001
+          image: ghcr.io/hyperledger/firefly-sandbox:latest
+          name: mingo3-sandbox-1
+          ports:
+            - containerPort: 3001
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ipfs-1
+  name: ipfs-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ipfs-1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ipfs-1
+    spec:
+      containers:
+        - env:
+            - name: IPFS_SWARM_KEY
+              value: |-
+                /key/swarm/psk/1.0.0/
+                /base16/
+                e32c1b1c54a23802416db198eb9dc181f2a5f975202b1a252841e2814866fff5
+            - name: LIBP2P_FORCE_PNET
+              value: "1"
+          image: ipfs/go-ipfs:v0.10.0
+          name: mingo3-ipfs-1
+          ports:
+            - containerPort: 5001
+            - containerPort: 8080
+          resources: {}
+          volumeMounts:
+            - mountPath: /export
+              name: ipfs-staging-1
+            - mountPath: /data/ipfs
+              name: ipfs-data-1
+      restartPolicy: Always
+      volumes:
+        - name: ipfs-staging-1
+          persistentVolumeClaim:
+            claimName: ipfs-staging-1
+        - name: ipfs-data-1
+          persistentVolumeClaim:
+            claimName: ipfs-data-1
+status: {}

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ethconnect-0
+  name: ethconnect-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ethconnect-0
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ethconnect-0
+    spec:
+      containers:
+        - args:
+            - server
+            - -f
+            - ./config/config.yaml
+            - -d
+            - "2"
+          image: ghcr.io/hyperledger/firefly-ethconnect@sha256:39ea63586b322de7c33f127f859b1d4c6fc7ff9e377049898e34a0dea30ab2d7
+          name: mingo3-ethconnect-0
+          ports:
+            - containerPort: 8080
+          resources: {}
+          volumeMounts:
+            - mountPath: /ethconnect/config
+              name: ethconnect-config-0
+            - mountPath: /ethconnect/abis
+              name: ethconnect-abis-0
+            - mountPath: /ethconnect/events
+              name: ethconnect-events-0
+      restartPolicy: Always
+      volumes:
+        - name: ethconnect-config-0
+          persistentVolumeClaim:
+            claimName: ethconnect-config-0
+        - name: ethconnect-abis-0
+          persistentVolumeClaim:
+            claimName: ethconnect-abis-0
+        - name: ethconnect-events-0
+          persistentVolumeClaim:
+            claimName: ethconnect-events-0
+status: {}

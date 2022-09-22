@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dataexchange-1
+  name: dataexchange-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dataexchange-1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: dataexchange-1
+    spec:
+      containers:
+        - image: ghcr.io/hyperledger/firefly-dataexchange-https@sha256:9b191cf693a5b4a3b0bff48aac36fa76cf040d94033607a240cbd83e4fd2942c
+          name: mingo3-dataexchange-1
+          ports:
+            - containerPort: 3000
+          resources: {}
+          volumeMounts:
+            - mountPath: /data
+              name: dataexchange-1
+      restartPolicy: Always
+      volumes:
+        - name: dataexchange-1
+          persistentVolumeClaim:
+            claimName: dataexchange-1
+status: {}

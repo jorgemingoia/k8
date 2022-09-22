@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: firefly-core-1
+  name: firefly-core-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: firefly-core-1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: firefly-core-1
+    spec:
+      containers:
+        - image: ghcr.io/hyperledger/firefly@sha256:cc85fa705184f53dba164bac4167c7d51015d2308bf8c2bf26d99a63c802d84e
+          name: mingo3-firefly-core-1
+          ports:
+            - containerPort: 5001
+            - containerPort: 5201
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/firefly
+              name: firefly-core-1
+      restartPolicy: Always
+      volumes:
+        - name: firefly-core-1
+          persistentVolumeClaim:
+            claimName: firefly-core-1
+status: {}
