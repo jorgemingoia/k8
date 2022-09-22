@@ -7,7 +7,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: ethconnect-0
-  name: ethconnect_0
+  name: ethconnect-0
 spec:
   ports:
     - name: "5102"
